@@ -12,6 +12,9 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
+          "allowedCommonJsDependencies": [
+            "browser-serialport"
+         ],    
           "options": {
             "outputPath": "dist/temperature",
             "index": "src/index.html",

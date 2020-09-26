@@ -1,0 +1,8 @@
+{
+    "/ws/*": {
+        "target": "http://10.0.0.62:15672",
+        "secure": false,
+        "logLevel": "debug",
+        "ws": true
+    }
+}

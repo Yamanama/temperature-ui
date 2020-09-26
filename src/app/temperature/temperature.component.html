@@ -1,1 +1,11 @@
-<app-radar></app-radar>
+<div style="display: block">
+    <canvas baseChart
+            [datasets]="radarChartData"
+            [labels]="radarChartLabels"
+            [chartType]="radarChartType">
+    </canvas>
+</div>
+<div class="chart-wrapper">
+    <canvas #chart width="600" height="200"></canvas>
+</div>
+

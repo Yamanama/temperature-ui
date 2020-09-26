@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { GaugeChartModule } from 'angular-gauge-chart';
 import { AppComponent } from './app.component';
 import { GaugeComponent } from './gauge/gauge.component';
 import { ChartComponent } from './chart/chart.component';
@@ -18,7 +17,6 @@ import { TemperatureComponent } from './temperature/temperature.component';
   ],
   imports: [
     BrowserModule,
-    GaugeChartModule,
     ChartsModule
   ],
   providers: [],

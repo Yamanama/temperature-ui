@@ -1,9 +1,18 @@
-<div style="display: block">
+<!-- <div style="display: block">
     <canvas baseChart
             [datasets]="radarChartData"
             [labels]="radarChartLabels"
             [chartType]="radarChartType">
     </canvas>
+</div> -->
+<div class="gauge-wrapper">
+    <ngx-gauge #gauge [type]="gaugeType" 
+            [value]="gaugeValue" 
+            [label]="gaugeLabel"  
+            [append]="gaugeAppendText"
+            min=0
+            max=3000>
+    </ngx-gauge>
 </div>
 <div class="chart-wrapper">
     <canvas #chart width="600" height="200"></canvas>

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { ChartsModule } from 'ng2-charts';
 import { TemperatureComponent } from './temperature/temperature.component';
+import { NgxGaugeModule } from 'ngx-gauge';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { TemperatureComponent } from './temperature/temperature.component';
   ],
   imports: [
     BrowserModule,
-    ChartsModule
+    ChartsModule,
+    NgxGaugeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

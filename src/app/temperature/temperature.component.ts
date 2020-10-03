@@ -14,12 +14,11 @@ export class TemperatureComponent implements OnInit, OnDestroy, AfterViewInit {
   client: any;
 
   constructor() {}
-  // radar chart vars
-  public radarChartLabels = [ 'Celsius', 'Farenheit', 'Voltage'];
-  public radarChartData = [
-    {data: [0, 0, 0], label: 'TMP36'}
-  ];
-  public radarChartType = 'radar';
+
+  gaugeType = "semi";
+  gaugeValue = 28.3;
+  gaugeLabel = "RPM";
+  gaugeAppendText = "";
   /**
    * AfterViewInit Lifecycle hook
    */
@@ -32,20 +31,7 @@ export class TemperatureComponent implements OnInit, OnDestroy, AfterViewInit {
         datasets: [
           {
             data: [],
-            label: "Celsius",
-            borderColor: 'red',
-            backgroundColor: 'rgba(255,0,0,0.28)',
-            fill: true
-          },
-          {
-            data: [],
-            label: "Fahrenheit",
-            borderColor: 'blue',
-            fill: true
-          },
-          {
-            data: [],
-            label: "Voltage",
+            label: "RPMs",
             borderColor: 'green',
             fill: true
           }
@@ -58,22 +44,19 @@ export class TemperatureComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   ngOnInit(): void {
     // establish the websocket connection
-    this.client = webSocket('ws://10.0.0.156:8080');
+    this.client = webSocket('ws://localhost:8080');
     // subscribe to the websocket
     this.client.subscribe(msg => {
       // update the radar chart
-      this.radarChartData[0].data = [];
-      this.radarChartData[0].data = [ msg['celsius'], msg['fahrenheit'], msg['voltage']*100 ];
+      // this.radarChartData[0].data = [];
+      // this.radarChartData[0].data = [ msg['celsius'], msg['fahrenheit'], msg['voltage']*100 ];
+      this.gaugeValue = msg['rpmMeasured'];
       // update the line chart
-      this.chart.chart.data.datasets[0].data.push(msg['celsius']);
-      this.chart.chart.data.datasets[1].data.push(msg['fahrenheit']);
-      this.chart.chart.data.datasets[2].data.push(msg['voltage']);
+      this.chart.chart.data.datasets[0].data.push(msg['rpmMeasured']);
       this.chart.chart.data.labels.push(msg['time']);
       // remove the first element after 10 elements are present
-      if (this.chart.chart.data.labels.length > 10) {
+      if (this.chart.chart.data.labels.length > 50) {
         this.chart.chart.data.datasets[0].data.shift();
-        this.chart.chart.data.datasets[1].data.shift();
-        this.chart.chart.data.datasets[2].data.shift();
         this.chart.chart.data.labels.shift();
       }
       // update the chart

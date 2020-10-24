@@ -15,9 +15,9 @@ export class TemperatureComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor() {}
   // radar chart vars
-  public radarChartLabels = [ 'Celsius', 'Farenheit', 'Voltage'];
+  public radarChartLabels = [ 'Celsius', 'Farenheit', 'Humidity'];
   public radarChartData = [
-    {data: [0, 0, 0], label: 'TMP36'}
+    {data: [0, 0, 0], label: 'DHT11'}
   ];
   public radarChartType = 'radar';
   /**
@@ -45,7 +45,7 @@ export class TemperatureComponent implements OnInit, OnDestroy, AfterViewInit {
           },
           {
             data: [],
-            label: "Voltage",
+            label: "Humidity",
             borderColor: 'green',
             fill: true
           }
@@ -58,17 +58,22 @@ export class TemperatureComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   ngOnInit(): void {
     // establish the websocket connection
-    this.client = webSocket('ws://10.0.0.156:8080');
+    this.client = webSocket({url: 'ws://10.0.0.118:8080', deserializer: ({data}) => data});
     // subscribe to the websocket
+    let counter = 0;
     this.client.subscribe(msg => {
+      // massage the message
+      msg = JSON.parse(msg);
+      msg.fahrenheit = (msg['temperature'] * 9/5) + 32;
+      console.log(msg);
       // update the radar chart
       this.radarChartData[0].data = [];
-      this.radarChartData[0].data = [ msg['celsius'], msg['fahrenheit'], msg['voltage']*100 ];
+      this.radarChartData[0].data = [ msg['temperature'], msg['fahrenheit'], msg['humidity'] ];
       // update the line chart
-      this.chart.chart.data.datasets[0].data.push(msg['celsius']);
+      this.chart.chart.data.datasets[0].data.push(msg['temperature']);
       this.chart.chart.data.datasets[1].data.push(msg['fahrenheit']);
-      this.chart.chart.data.datasets[2].data.push(msg['voltage']);
-      this.chart.chart.data.labels.push(msg['time']);
+      this.chart.chart.data.datasets[2].data.push(msg['humidity']);
+      this.chart.chart.data.labels.push(counter);
       // remove the first element after 10 elements are present
       if (this.chart.chart.data.labels.length > 10) {
         this.chart.chart.data.datasets[0].data.shift();
@@ -77,6 +82,7 @@ export class TemperatureComponent implements OnInit, OnDestroy, AfterViewInit {
         this.chart.chart.data.labels.shift();
       }
       // update the chart
+      counter += 2;
       this.chart.update();
     });
     
